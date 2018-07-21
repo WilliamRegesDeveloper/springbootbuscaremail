@@ -1,4 +1,4 @@
-package br.com.advtec.services;
+package br.com.advtec.schedulecontroller;
 
 import java.util.Arrays;
 
@@ -7,15 +7,17 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import br.com.advtec.modelo.Mensagem;
+import br.com.advtec.services.BuscarEmailsServico;
+import br.com.advtec.services.EnviarEmailsServico;
 
 @EnableScheduling
 public class ScheduleSincronizaEmailService {
 	
 	@Autowired
-	private ServicoBuscarEmail servicoBuscaEmail;
+	private BuscarEmailsServico servicoBuscaEmail;
 	
 	@Autowired
-	private ServicoEnviaEmail servicoEnviaEmail;
+	private EnviarEmailsServico servicoEnviaEmail;
 
 	@Scheduled(cron = "*/1 * * * *")
 	public void buscarCaixaEmail() {

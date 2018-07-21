@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import br.com.advtec.modelo.Mensagem;
 
 @Service
-public class ServicoEnviaEmail {
+public class EnviarEmailsServico {
 
 	@Autowired
 	private JavaMailSender sender;

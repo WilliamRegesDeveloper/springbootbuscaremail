@@ -15,12 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.advtec.config.ConfigEmailPop3;
+import br.com.advtec.config.property.EmailPop3Properties;
 
 @Service
-public class ServicoBuscarEmail {
+public class BuscarEmailsServico {
 
 	@Autowired
 	private ConfigEmailPop3 emailPop3;
+	
+	@Autowired
+	private EmailPop3Properties emailPop3Properties;
 
 	public void buscarNotasDeEmailsXml() {
 		Session session = emailPop3.factorySession();
@@ -77,10 +81,11 @@ public class ServicoBuscarEmail {
 		}
 	}
 
-	
 	private Store abreStorageDoEmail(Session session) throws NoSuchProviderException, MessagingException {
-		Store store = session.getStore("pop3");
-		store.connect("pop.advtec.com.br", 110, "rehau@advtec.com.br", "re123456");
+
+		Store store = session.getStore(emailPop3Properties.getStore().getProtocol());
+		store.connect(emailPop3Properties.getPop3().getHost(), Integer.valueOf(emailPop3Properties.getPop3().getPort()),
+					  emailPop3Properties.getPop3().getUser(), emailPop3Properties.getPop3().getPassword());
 
 		if (store.isConnected())
 			System.out.println("Logado no Webmail");

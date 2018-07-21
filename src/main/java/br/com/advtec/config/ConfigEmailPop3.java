@@ -9,43 +9,33 @@ import javax.mail.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import br.com.advtec.config.property.EmailPop3Properties;
 
 @Configuration
 @Component
-@PropertySource("classpath:conf_pop3.properties")
 public class ConfigEmailPop3 {
 
 	@Autowired
-	Environment envPropertie;
+	private EmailPop3Properties pop3Propertie;
 
 	@Bean
 	public Session factorySession() {
 
 		/** Propiedades de conexão pop3 */
-		Properties prop = new Properties();		
-		
-//		prop.setProperty("mail.pop3.host", envPropertie.getProperty("mail.pop3.host"));
-//		prop.setProperty("mail.pop3.port", envPropertie.getProperty("mail.pop3.port"));
-//		prop.setProperty("mail.pop3.user", envPropertie.getProperty("mail.pop3.user"));
-//		
-//		prop.setProperty("mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-//		prop.setProperty("mail.pop3.socketFactory.fallback", "true");
-//		prop.setProperty("mail.pop3.socketFactory.port", "995");
-		
+		Properties prop = new Properties();
+
 		/** Authentica usuário */
 		Authenticator authenticator = new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(envPropertie.getProperty("mail.pop3.user"),
-						envPropertie.getProperty("mail.pop3.password"));
+				return new PasswordAuthentication(pop3Propertie.getPop3().getUser(),
+						pop3Propertie.getPop3().getPassword());
 			}
 		};
 
 		Session session = Session.getDefaultInstance(prop, authenticator);
-
 
 		return session;
 
