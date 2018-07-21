@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Configuration
 @Component
 @PropertySource("classpath:conf_pop3.properties")
-public class EmailPop3 {
+public class ConfigEmailPop3 {
 
 	@Autowired
 	Environment envPropertie;
