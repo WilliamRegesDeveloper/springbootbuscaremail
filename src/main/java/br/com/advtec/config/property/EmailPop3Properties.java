@@ -1,7 +1,9 @@
 package br.com.advtec.config.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
+@Component
 @ConfigurationProperties("mail")
 public class EmailPop3Properties {
 
