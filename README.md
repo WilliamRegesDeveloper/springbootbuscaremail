@@ -27,3 +27,7 @@ ferramenta STS SpringBoot:
 * JavaMail;
 * Protocolos SMTP e POP;
 * Maven;
+
+## Links do material base
+
+* [Baeldung](http://www.baeldung.com/spring-email)
