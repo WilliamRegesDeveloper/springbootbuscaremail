@@ -1,8 +1,9 @@
-## Projeto SpringBoot para Sincronizar Emails
+## Projeto Leitura de Caixa de Email
 
-A idéia desse código fonte é fazer com que o aplicativo sincronize
-de tempos em tempos com um servidor de email buscando assim anexos
-em sua caixa de entrada.
+A idéia desse protótipo de código fonte é fazer com que o aplicativo faça download
+de tempos em tempos com um servidor de email buscando assim anexos em sua caixa de 
+entrada como xml de notas, grave e envie reposta para outro email informando o 
+download bem sucedido.
 
 
 ## Objetivo do app
@@ -15,7 +16,8 @@ bastante de quem implementar esse código.
 
 ## Funcionamento
 Esse app contém um schedule como serviço configurado para rodar de tempos em tempos
-buscando email em algum servidor pop pre configurado no arquivo applicaton.properties
+buscando email em algum servidor pop pre configurado no arquivo applicaton.properties.
+O servidor de envio de email também tem parametros de configuração no arquivo application.properties
 
 
 ## Tecnologia utilizada
