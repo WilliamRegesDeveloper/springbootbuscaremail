@@ -12,8 +12,10 @@ import javax.mail.Session;
 import javax.mail.Store;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import br.com.advtec.action.EnviarEmailEvent;
 import br.com.advtec.config.ConfigEmailPop3;
 import br.com.advtec.config.property.EmailPop3Properties;
 
@@ -25,6 +27,9 @@ public class BuscarEmailsServico {
 	
 	@Autowired
 	private EmailPop3Properties emailPop3Properties;
+
+	@Autowired
+	private ApplicationEventPublisher publish;
 
 	public void buscarNotasDeEmailsXml() {
 		Session session = emailPop3.factorySession();
@@ -41,15 +46,15 @@ public class BuscarEmailsServico {
 
 			folder.close(false);
 			store.close();
+			
+			EnviarEmailEvent email = new EnviarEmailEvent(this);
+			publish.publishEvent(email);
+			
 		} catch (Exception e) {
 		}
 	}
 
-	private Folder abreInboxDoEmail(Store store) throws MessagingException {
-		Folder folder = store.getFolder("INBOX");
-		folder.open(Folder.READ_ONLY);
-		return folder;
-	}
+	
 
 	private void desempactarAnexosParaSalvar(Message[] messages) throws IOException, MessagingException {
 
@@ -71,6 +76,7 @@ public class BuscarEmailsServico {
 						// InputStream inputStream = bodyPart.getInputStream();
 
 						// gravaXml.gravarXmlBanco(inputStream);
+						
 
 					}
 
@@ -80,6 +86,7 @@ public class BuscarEmailsServico {
 
 		}
 	}
+	
 
 	private Store abreStorageDoEmail(Session session) throws NoSuchProviderException, MessagingException {
 
@@ -92,5 +99,12 @@ public class BuscarEmailsServico {
 		else
 			System.out.println("Não conectado");
 		return store;
+	}
+	
+	
+	private Folder abreInboxDoEmail(Store store) throws MessagingException {
+		Folder folder = store.getFolder("INBOX");
+		folder.open(Folder.READ_ONLY);
+		return folder;
 	}
 }
