@@ -1,4 +1,4 @@
-package br.com.advtec.action;
+package br.com.advtec.event;
 
 import java.util.Arrays;
 

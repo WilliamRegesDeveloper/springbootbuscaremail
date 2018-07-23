@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("mail")
 public class EmailPop3Properties {
 
-	private Pop3 pop3;
-	private Store store;
+	private Pop3 pop3 = new Pop3();
+	private Store store = new Store();
 	
 	public Pop3 getPop3() {
 		return pop3;
@@ -24,7 +24,7 @@ public class EmailPop3Properties {
 		private String user;
 		private String password;
 		
-		private SocketFactory socketFactory;
+		private SocketFactory socketFactory = new SocketFactory();
 
 		public String getHost() {
 			return host;

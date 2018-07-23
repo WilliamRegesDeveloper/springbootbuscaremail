@@ -1,64 +1,54 @@
 package br.com.advtec.services;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.mail.BodyPart;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
-import javax.mail.NoSuchProviderException;
-import javax.mail.Session;
 import javax.mail.Store;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import br.com.advtec.action.EnviarEmailEvent;
-import br.com.advtec.config.ConfigEmailPop3;
-import br.com.advtec.config.property.EmailPop3Properties;
+import br.com.advtec.event.EnviarEmailEvent;
+import br.com.advtec.event.SalvarDowloadAnexoEvent;
 
 @Service
-public class BuscarEmailsServico {
+public class BuscarAnexosDeEmailServico {
 
 	@Autowired
-	private ConfigEmailPop3 emailPop3;
-	
-	@Autowired
-	private EmailPop3Properties emailPop3Properties;
+	private Folder folder;
 
 	@Autowired
 	private ApplicationEventPublisher publish;
 
-	public void buscarNotasDeEmailsXml() {
-		Session session = emailPop3.factorySession();
+	public void buscarEmailsComNotasAnexasXml() {
 
 		try {
-
-			Store store = abreStorageDoEmail(session);
-
-			Folder folder = abreInboxDoEmail(store);
 
 			Message[] messages = folder.getMessages();
 
 			desempactarAnexosParaSalvar(messages);
 
+			Store store = folder.getStore();
 			folder.close(false);
 			store.close();
-			
+
 			EnviarEmailEvent email = new EnviarEmailEvent(this);
 			publish.publishEvent(email);
-			
+
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	
-
 	private void desempactarAnexosParaSalvar(Message[] messages) throws IOException, MessagingException {
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 100; i++) {
 
 			Object obj = messages[i].getContent();
 
@@ -73,10 +63,9 @@ public class BuscarEmailsServico {
 					if (bodyPart.getContentType().startsWith("application/xml")
 							|| bodyPart.getContentType().startsWith("application/octet-stream")) {
 
-						// InputStream inputStream = bodyPart.getInputStream();
+						InputStream inputStream = bodyPart.getInputStream();
 
-						// gravaXml.gravarXmlBanco(inputStream);
-						
+						publish.publishEvent(new SalvarDowloadAnexoEvent(this, inputStream));
 
 					}
 
@@ -86,25 +75,5 @@ public class BuscarEmailsServico {
 
 		}
 	}
-	
 
-	private Store abreStorageDoEmail(Session session) throws NoSuchProviderException, MessagingException {
-
-		Store store = session.getStore(emailPop3Properties.getStore().getProtocol());
-		store.connect(emailPop3Properties.getPop3().getHost(), Integer.valueOf(emailPop3Properties.getPop3().getPort()),
-					  emailPop3Properties.getPop3().getUser(), emailPop3Properties.getPop3().getPassword());
-
-		if (store.isConnected())
-			System.out.println("Logado no Webmail");
-		else
-			System.out.println("Não conectado");
-		return store;
-	}
-	
-	
-	private Folder abreInboxDoEmail(Store store) throws MessagingException {
-		Folder folder = store.getFolder("INBOX");
-		folder.open(Folder.READ_ONLY);
-		return folder;
-	}
 }
