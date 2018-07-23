@@ -1,4 +1,4 @@
-## Projeto Leitura de Caixa de Email
+## Projeto Leitura de Anexo de Email
 
 A idéia desse protótipo de código fonte é fazer com que o aplicativo faça download
 de tempos em tempos com um servidor de email buscando assim anexos em sua caixa de 
