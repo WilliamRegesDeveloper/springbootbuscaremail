@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("mail")
 public class EmailPop3Properties {
 
-	private final Pop3 pop3 = new Pop3();
-	private final Store store = new Store();
+	private Pop3 pop3 = new Pop3();
+	private Store store = new Store();
 	
 	public Pop3 getPop3() {
 		return pop3;
@@ -23,6 +23,8 @@ public class EmailPop3Properties {
 		private String port;
 		private String user;
 		private String password;
+		
+		private SocketFactory socketFactory = new SocketFactory();
 
 		public String getHost() {
 			return host;
@@ -55,6 +57,14 @@ public class EmailPop3Properties {
 		public void setPassword(String password) {
 			this.password = password;
 		}
+		
+		public SocketFactory getSocketFactory() {
+			return socketFactory;
+		}
+		
+		public void setSocketFactory(SocketFactory socketFactory) {
+			this.socketFactory = socketFactory;
+		}
 
 	}
 
@@ -68,6 +78,38 @@ public class EmailPop3Properties {
 		public void setProtocol(String protocol) {
 			this.protocol = protocol;
 		}
+	}
+	
+	public static class SocketFactory {
+
+		private String classe;
+		private String fallback;
+		private String port;
+
+		public String getClasse() {
+			return classe;
+		}
+
+		public void setClasse(String classe) {
+			this.classe = classe;
+		}
+
+		public String getFallback() {
+			return fallback;
+		}
+
+		public void setFallback(String fallback) {
+			this.fallback = fallback;
+		}
+
+		public String getPort() {
+			return port;
+		}
+
+		public void setPort(String port) {
+			this.port = port;
+		}
+
 	}
 	
 }
